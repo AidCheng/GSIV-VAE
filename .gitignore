@@ -1,1 +1,6 @@
 ckpt/
+.conda/
+__pycache__/
+results/celeb/
+results/clic/
+results/metface/
