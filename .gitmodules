@@ -1,0 +1,3 @@
+[submodule "gsImage"]
+	path = gsImage
+	url = git@github.com:AidCheng/GaussianImage.git
