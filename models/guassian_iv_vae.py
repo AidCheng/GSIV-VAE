@@ -5,16 +5,10 @@ import torch.nn as nn
 from .vae3d import VAutoencoder3d
 
 class IV_VAE(nn.Module):
-    """
-    自定义潜空间大小的 IV-VAE，用于单数据集 Overfitting。
-    - 不依赖预训练权重
-    - scale/shift 固定为 1.0 / 0.0
-    - 允许自由设置 z_dim, dim, dropout 等参数
-    """
     def __init__(
         self,
-        z_dim=16,             # 潜变量维度（原版为16）
-        dim=96,               # 通道宽度（主干宽度）
+        z_dim=16,             # latent dimension (originally 16)
+        dim=96,               # channel dimension (originally 96) 
         dim_mult=[1, 2, 4, 4],
         num_res_blocks=2,
         attn_scales=[],

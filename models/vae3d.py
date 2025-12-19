@@ -559,8 +559,20 @@ def count_conv3d(model):
             count += 1
     return count
 
-class VAutoencoder3d(nn.Module):
+class Modifier(nn.Module):
+    def __init__(self, zdim):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Conv3d(zdim, zdim, 1),
+            nn.SiLU(),
+            nn.Conv3d(zdim, zdim, 1),
+        )
 
+    def forward(self, z):
+        return self.net(z)
+    
+
+class VAutoencoder3d(nn.Module):
     def __init__(
         self,
         dim=64,
@@ -572,6 +584,7 @@ class VAutoencoder3d(nn.Module):
         dropout=0.0,
         scale_factor=1,
         shift_factor=0,
+        enable_modifier = False,
     ):
         super().__init__()
         self.dim = dim 
@@ -598,10 +611,16 @@ class VAutoencoder3d(nn.Module):
         # shift & scale
         self.scale_factor = scale_factor
         self.shift_factor = shift_factor 
+
+        if enable_modifier:
+            self.latent_modifier = Modifier(z_dim)
+    
         
-    def forward(self, x):
+    def forward(self, x, enable_modifier=False):
         b = x.shape[0]  
         z = self.encode(x) 
+        if enable_modifier and self.latent_modifier is not None:
+            z = self.latent_modifier(z)
         x_recon = self.decode(z)    
         return x_recon
     
