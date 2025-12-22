@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 # 引入主模型骨架
-from .vae3d import VAutoencoder3d
+from vae3d import VAutoencoder3d
 
 class IV_VAE(nn.Module):
     def __init__(
@@ -14,10 +14,11 @@ class IV_VAE(nn.Module):
         attn_scales=[],
         temperal_downsample=[False, True, True],
         dropout=0.0,
+        enable_modifier=False,
     ):
         super().__init__()
 
-        # 配置项
+        # Config
         self.z_dim = z_dim
         self.dim = dim
         self.dim_mult = dim_mult
@@ -25,6 +26,7 @@ class IV_VAE(nn.Module):
         self.attn_scales = attn_scales
         self.temperal_downsample = temperal_downsample
         self.dropout = dropout
+        self.enable_modifier = enable_modifier
 
         # 构建 3D VAE 主体
         self.model = VAutoencoder3d(
@@ -37,6 +39,7 @@ class IV_VAE(nn.Module):
             dropout=dropout,
             scale_factor=1.0,   # 不再使用预训练scale
             shift_factor=0.0,
+            enable_modifier=enable_modifier,
         )
 
     def forward(self, x):
