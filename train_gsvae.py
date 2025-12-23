@@ -5,7 +5,7 @@ import math
 from copy import deepcopy
 from torch.utils.data import DataLoader, Dataset
 from pathlib import Path
-# from models.guassian_iv_vae import IV_VAE # Assuming this exists
+from models.guassian_iv_vae import IV_VAE 
 from types import SimpleNamespace
 from models.guassian_iv_vae import IV_VAE
 import io, contextlib
@@ -18,6 +18,9 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 class PatchDataset(Dataset):
     def __init__(self, data, device):
+        """
+        data: Tensor of shape (N, 3, 1, H, W)
+        """
         self.data = data
         self.device = device
 
